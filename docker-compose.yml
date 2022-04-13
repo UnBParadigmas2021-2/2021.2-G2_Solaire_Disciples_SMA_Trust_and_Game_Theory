@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  pade:
+    image: victorcmoura/pade:paradigmas
+    volumes:
+      - ".:/trust_and_game_theory"
+    ports:
+      - "20000:5000"
+    working_dir: "/trust_and_game_theory"
