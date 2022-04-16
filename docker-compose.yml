@@ -1,10 +1,9 @@
-version: '2'
+version: '3'
 
 services:
   pade:
-    image: victorcmoura/pade:paradigmas
-    volumes:
-      - ".:/trust_and_game_theory"
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
     ports:
       - "20000:5000"
-    working_dir: "/trust_and_game_theory"
