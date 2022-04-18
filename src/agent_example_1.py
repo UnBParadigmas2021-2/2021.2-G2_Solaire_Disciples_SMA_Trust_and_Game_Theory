@@ -126,7 +126,7 @@ class AgentPlayer(Agent):
     def __init__(self, aid, machine, persona):
         super(AgentPlayer, self).__init__(aid = aid)
         display_message(self.aid.localname,
-                        'Hello World! Im a BasePlayer!')
+                        'Hello World! Im a/an ' + persona)
         self.call_later(8.0, self.launch_subscriber_protocol)
         self.machine = machine
         self.persona = persona
