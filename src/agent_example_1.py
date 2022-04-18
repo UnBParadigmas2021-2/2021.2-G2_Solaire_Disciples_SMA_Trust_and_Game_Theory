@@ -20,24 +20,21 @@ class DummyTime(TimedBehaviour):
 
     def on_time(self):
         super(DummyTime, self).on_time()
-        print('timed_message')
         message = ACLMessage(ACLMessage.INFORM)
         message.set_protocol(ACLMessage.FIPA_SUBSCRIBE_PROTOCOL)
-        message.set_content(str(random.random()))
         self.notify(message)
         self.inc += 0.1
 
 
-class MachineSubscriptionProtocol(FipaSubscribeProtocol):
+class MachineProtocol(FipaSubscribeProtocol):
 
     def __init__(self, agent):
-        super(MachineSubscriptionProtocol, self).__init__(agent,
-                                                          message=None,
-                                                          is_initiator=False)
+        super(MachineProtocol, self).__init__(agent,
+                                              message=None,
+                                              is_initiator=False)
 
     def handle_subscribe(self, message):
         self.register(message.sender)
-        print('sub recebido')
         display_message(self.agent.aid.name,
                         message.content)
         resposta = message.create_reply()
@@ -52,7 +49,7 @@ class MachineSubscriptionProtocol(FipaSubscribeProtocol):
 
     def notify(self, message):
         display_message(self.agent.aid.name, 'Notifying')
-        super(MachineSubscriptionProtocol, self).notify(message)
+        super(MachineProtocol, self).notify(message)
 
 
 class AgentMachine(Agent):
@@ -61,7 +58,7 @@ class AgentMachine(Agent):
     def __init__(self, aid):
         super(AgentMachine, self).__init__(aid=aid)
         display_message(self.aid.localname, 'BEEP BOOP! Im the MACHINE!')
-        self.machine_subscription_protocol = MachineSubscriptionProtocol(self)
+        self.machine_subscription_protocol = MachineProtocol(self)
         self.dummy_timed_message = DummyTime(self,
                                              self.machine_subscription_protocol.notify)
 
@@ -80,47 +77,54 @@ class AgentMachine(Agent):
 
     def react(self, message):
         super(AgentMachine, self).react(message)
-        print('react machine')
         filter = f()
         filter.performative = ACLMessage.REQUEST
         if filter.filter(message=message):
-
-            print('message is request')
-            print(message.content)
-
             reply = message.create_reply()
             reply.set_performative(ACLMessage.AGREE)
             reply.add_receiver(message.sender)
             self.send(reply)
+        else:
+            if(isinstance(message.content, bool)):
+                self.play_list.append({'play': message.content, 'player': message.sender.name})
+        if len(self.play_list) == 2:
+            print('{} vs {}'.format(self.play_list[0]['player'], self.play_list[1]['player']))
+            if self.play_list[0]['play'] == False and self.play_list[1]['play'] == False:
+                print('Ninguem roubou!')
+            elif self.play_list[0]['play'] == True and self.play_list[1]['play'] == False:
+                print('{} roubou!'.format(self.play_list[0]['player']))
+            elif self.play_list[0]['play'] == False and self.play_list[1]['play'] == True:
+                print('{} roubou!'.format(self.play_list[1]['player']))
+            elif self.play_list[0]['play'] == True and self.play_list[1]['play'] == True:
+                print('Os dois roubaram!')
+            self.play_list= []
         # display_message(self.aid.localname, message)
         pass
 
 
 class PlayerProtocol(FipaSubscribeProtocol):
-    def __init__(self, machine, message):
+    def __init__(self, machine, message, persona):
         super(PlayerProtocol, self).__init__(machine,
-                                                    message)
+                                             message)
+        self.persona=persona
 
     def handle_agree(self, message):
         display_message(self.agent.aid.name, message.content)
 
     def handle_inform(self, message):
-        # display_message(self.agent.aid.name, message.content)
-        print('inform recebido')
-
-    def handle_request(self, message):
-        print('aaaaaaaaaaaa')
-        display_message(self.aid.localname,
-                        'Mensagem recebida, preparando jogada')
-        reply = message.create_reply()
-        reply.set_content(True)
+        reply=message.create_reply()
+        pprint('{} está escolhendo'.format(self.agent.aid.name))
+        if(self.persona == 'Cooperator'):
+            reply.set_content(False)
+        elif(self.persona == 'Cheater'):
+            reply.set_content(True)
         reply.set_performative(ACLMessage.INFORM)
         self.agent.send(reply)
 
 
 class AgentPlayer(Agent):
     def __init__(self, aid, machine, persona):
-        super(AgentPlayer, self).__init__(aid=aid)
+        super(AgentPlayer, self).__init__(aid = aid)
         display_message(self.aid.localname,
                         'Hello World! Im a BasePlayer!')
         self.call_later(8.0, self.launch_subscriber_protocol)
@@ -132,10 +136,9 @@ class AgentPlayer(Agent):
         msg = ACLMessage(ACLMessage.SUBSCRIBE)
         msg.set_protocol(ACLMessage.FIPA_SUBSCRIBE_PROTOCOL)
         msg.set_content('Subscription request')
-        msg.set_sender(self.aid)
         msg.add_receiver(self.machine.aid)
 
-        self.protocol = PlayerProtocol(self.machine, msg)
+        self.protocol = PlayerProtocol(self, msg, self.persona)
         self.behaviours.append(self.protocol)
         self.protocol.on_start()
 
@@ -173,8 +176,8 @@ class AgentPlayer(Agent):
 
 
 if __name__ == '__main__':
-    cheater = 1
-    cooperator = 1
+    cheater = 3
+    cooperator = 7
     c = 0
     agents = list()
     player_names = list()
@@ -187,10 +190,10 @@ if __name__ == '__main__':
 
     for i in range(cooperator):
         port = int(argv[1]) + c
-        cooperator_name = 'copycat_{}@localhost:{}'.format(port, port)
+        cooperator_name = 'cooperator_{}@localhost:{}'.format(port, port)
         cooperator_init = AgentPlayer(AID(name=cooperator_name),
                                       machine=machine_instance,
-                                      persona='Copycat')
+                                      persona='Cooperator')
         player_names.append(cooperator_name)
         agents.append(cooperator_init)
         c += 1
