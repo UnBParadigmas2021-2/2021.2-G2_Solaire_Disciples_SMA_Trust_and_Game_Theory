@@ -8,6 +8,8 @@ class Copycat(Agent):
         display_message(self.aid.localname,
                         'Hi! Im a Copycat: I start cooperating, then I simply \
                         repeat whatever my adversary did in the last round')
+        
+        self.is_first_move  = True
 
     def react(self, message):
         pprint(self.__class__.__name__)
