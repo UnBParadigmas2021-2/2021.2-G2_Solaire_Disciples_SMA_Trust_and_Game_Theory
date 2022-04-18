@@ -183,10 +183,18 @@ class Copycat(Agent):
                         repeat whatever my adversary did in the last round')
 
 
+class Grudger(Agent):
+    def __init__(self, aid):
+        super(Copycat, self).__init__(aid=aid)
+        display_message(self.aid.localname,
+                        'Hi! Im a Grudger: I will cooperate... unless my \
+                        adversary cheats on me (then I will always cheat)!')
+
 if __name__ == '__main__':
     cheater     = 3
     cooperator  = 7
     copycat     = 3
+    grudger     = 4
     c = 0
     agents = list()
     player_names = list()
@@ -225,6 +233,16 @@ if __name__ == '__main__':
                                    persona='Copycat')
         player_names.append(copycat_name)
         agents.append(copycat_init)
+        c += 1
+        
+    for i in range(grudger):
+        port = int(argv[1]) + c
+        grudger_name = 'grudger_{}@localhost:{}'.format(port, port)
+        grudger_init = AgentPlayer(AID(name=grudger_name),
+                                   machine=machine_instance,
+                                   persona='Grudger')
+        player_names.append(grudger_name)
+        agents.append(grudger_init)
         c += 1
 
     start_loop(agents)
