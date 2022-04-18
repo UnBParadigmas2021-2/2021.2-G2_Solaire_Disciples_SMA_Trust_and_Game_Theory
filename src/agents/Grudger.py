@@ -1,7 +1,6 @@
 from pade.core.agent import Agent
 from pade.misc.utility import display_message
-import pprint
-
+from pprint import pprint
 
 class Grudger(Agent):
     def __init__(self, aid):

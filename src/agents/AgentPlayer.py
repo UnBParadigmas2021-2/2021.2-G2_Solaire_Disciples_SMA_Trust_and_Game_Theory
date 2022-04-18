@@ -1,4 +1,4 @@
-import pprint
+from pprint import pprint
 from pade.misc.utility import display_message
 from pade.core.agent import Agent
 from pade.acl.messages import ACLMessage
