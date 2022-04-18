@@ -1,4 +1,3 @@
-import random
 from pade.misc.utility import display_message, start_loop
 from pade.behaviours.protocols import FipaSubscribeProtocol, TimedBehaviour
 from pade.core.agent import Agent
@@ -7,8 +6,6 @@ from pade.acl.messages import ACLMessage
 from pprint import pprint
 from pade.acl.aid import AID
 from sys import argv
-from itertools import count, groupby
-from itertools import combinations
 
 
 class DummyTime(TimedBehaviour):
