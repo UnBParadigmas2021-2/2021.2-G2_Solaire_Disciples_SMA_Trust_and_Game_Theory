@@ -175,9 +175,18 @@ class AgentPlayer(Agent):
 #         display_message(self.aid.localname, 'Mensagem recebida')
 
 
+class Copycat(Agent):
+    def __init__(self, aid):
+        super(Copycat, self).__init__(aid=aid)
+        display_message(self.aid.localname,
+                        'Hi! Im a Copycat: I start cooperating, then I simply \
+                        repeat whatever my adversary did in the last round')
+
+
 if __name__ == '__main__':
-    cheater = 3
-    cooperator = 7
+    cheater     = 3
+    cooperator  = 7
+    copycat     = 3
     c = 0
     agents = list()
     player_names = list()
@@ -206,6 +215,16 @@ if __name__ == '__main__':
                                    persona='Cheater')
         player_names.append(cheater_name)
         agents.append(cheater_init)
+        c += 1
+
+    for i in range(copycat):
+        port = int(argv[1]) + c
+        copycat_name = 'copycat_{}@localhost:{}'.format(port, port)
+        copycat_init = AgentPlayer(AID(name=copycat_name),
+                                   machine=machine_instance,
+                                   persona='Copycat')
+        player_names.append(copycat_name)
+        agents.append(copycat_init)
         c += 1
 
     start_loop(agents)
