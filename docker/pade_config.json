@@ -1,0 +1,26 @@
+{
+    "agent_files": [
+        "agent_example_1.py"
+    ],
+    "port": 20000,
+    "num": 1,
+    "pade_ams": {
+        "host": "localhost",
+        "port": 8000
+    },
+    "pade_web": {
+        "active": true,
+        "host": "localhost",
+        "port": 5000
+    },
+    "pade_sniffer": {
+        "active": true,
+        "host": "localhost",
+        "port": 8001
+    },
+    "session": {
+        "username": "pade_user",
+        "email": "pade_user@pade.com",
+        "password": "123456"
+    }
+}
