@@ -51,15 +51,15 @@ A rodada funciona assim: 2 jogadores se enfrentam. Eles vão optar por colocar a
 
 Inicialização
 
-![](./images/pade-init)
+![](./images/pade-init.png)
 
 Configurando agentes...
 
-![](./images/pade-2)
+![](./images/pade-2.png)
 
 Jogos acontecendo
 
-![](./images/pade-3)
+![](./images/pade-3.png)
 
 ## Instalação 
 **Linguagens**: Python<br>
