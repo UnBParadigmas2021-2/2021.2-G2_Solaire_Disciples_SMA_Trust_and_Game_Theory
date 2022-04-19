@@ -8,4 +8,4 @@ ADD docker/pade_config.json ./
 
 COPY ./src/ ./
 
-CMD pade start-runtime --config_file pade_config.json
+# CMD pade start-runtime --config_file pade_config.json
