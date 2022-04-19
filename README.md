@@ -104,7 +104,8 @@ Procure o CONTAINER ID da imagem 20212-g2_solaire_disciples_sma_trust_and_game_t
 
 
 ## Vídeo
-Adicione 1 ou mais vídeos com a execução do projeto.
+
+Assista aqui: https://youtu.be/kPjzj73cK4M
 
 ## Outros 
 Quaisquer outras informações sobre seu projeto podem ser descritas a seguir.
