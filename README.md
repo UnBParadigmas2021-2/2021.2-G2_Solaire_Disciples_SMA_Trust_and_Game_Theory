@@ -48,7 +48,18 @@ Simularemos cenários em que diferentes jogadores se enfrentam, no formato de to
 A rodada funciona assim: 2 jogadores se enfrentam. Eles vão optar por colocar a moeda ou não por Y vezes. Ao final, a máquina consulta o saldo de cada um e anuncia o vencedor ou empate.
 
 ## Screenshots
-Adicione 2 ou mais screenshots do projeto em termos de interface e/ou funcionamento.
+
+Inicialização
+
+![](./images/pade-init)
+
+Configurando agentes...
+
+![](./images/pade-2)
+
+Jogos acontecendo
+
+![](./images/pade-3)
 
 ## Instalação 
 **Linguagens**: Python<br>
